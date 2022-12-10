@@ -10,24 +10,24 @@ def part_2(data: List[str]):
 
 
 def solve(data: List[str]):
-    cycles = 0
+    cycle = 0
     reg = 1
     sss = 0  # signal strength sum
     screen = ''
 
     for op in data:
         if op == 'noop':
-            cycles, sss, screen = tick(cycles, reg, sss, screen)
+            cycle, sss, screen = tick(cycle, reg, sss, screen)
         else:
-            cycles, sss, screen = tick(cycles, reg, sss, screen)
-            cycles, sss, screen = tick(cycles, reg, sss, screen)
+            cycle, sss, screen = tick(cycle, reg, sss, screen)
+            cycle, sss, screen = tick(cycle, reg, sss, screen)
             reg += int(op.split()[1])
 
     return sss, screen
 
 
 def tick(cycle: int, reg: int, sss: int, screen: str):
-    screen += '.#'[(cycle % 40) in list(range(reg - 1, reg + 2))]
+    screen += '.#'[(cycle % 40) in range(reg - 1, reg + 2)]
     cycle += 1
 
     if cycle == 20 or (cycle + 20) % 40 == 0:

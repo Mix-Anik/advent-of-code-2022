@@ -26,5 +26,5 @@ class TestDay10Solutions:
         )
 
     def teardown_class(self):
-        LOG.info(f'Part 1 answer: {part_1(self.day_10_data)}')  # 13140
+        LOG.info(f'Part 1 answer: {part_1(self.day_10_data)}')  # 13060
         LOG.info(f'Part 2 answer:\n{part_2(self.day_10_data)}')  # FJUBULRZ
