@@ -2,56 +2,38 @@ from typing import List
 
 
 def part_1(data: List[str]):
-    cycles = 0
-    reg = 1
-    res = 0
-
-    for op in data:
-        if op == 'noop':
-            cycles, reg, res = cycle(cycles, reg, res)
-        else:
-            increment = int(op.split()[1])
-            cycles, reg, res = cycle(cycles, reg, res)
-            cycles, reg, res = cycle(cycles, reg, res)
-            reg += increment
-
-    return res
+    return solve(data)[0]
 
 
 def part_2(data: List[str]):
+    return solve(data)[1]
+
+
+def solve(data: List[str]):
     cycles = 0
     reg = 1
-    res = ''
+    sss = 0  # signal strength sum
+    screen = ''
 
     for op in data:
         if op == 'noop':
-            cycles, reg, res = cycle2(cycles, reg, res)
+            cycles, sss, screen = tick(cycles, reg, sss, screen)
         else:
-            cycles, reg, res = cycle2(cycles, reg, res)
-            cycles, reg, res = cycle2(cycles, reg, res)
+            cycles, sss, screen = tick(cycles, reg, sss, screen)
+            cycles, sss, screen = tick(cycles, reg, sss, screen)
             reg += int(op.split()[1])
 
-    return res
+    return sss, screen
 
 
-def cycle(cur: int, reg: int, res: int):
-    cur += 1
-    if cur != 0 and (cur == 20 or (cur + 20) % 40 == 0):
-        res += cur * reg
+def tick(cycle: int, reg: int, sss: int, screen: str):
+    screen += '.#'[(cycle % 40) in list(range(reg - 1, reg + 2))]
+    cycle += 1
 
-    return cur, reg, res
+    if cycle == 20 or (cycle + 20) % 40 == 0:
+        sss += cycle * reg
 
+    if cycle % 40 == 0:
+        screen += '\n'
 
-def cycle2(cur: int, reg: int, res: int):
-    if cur in list(range(reg - 1, reg + 2)):
-        res += '#'
-    else:
-        res += '.'
-
-    cur += 1
-
-    if cur != 0 and cur % 40 == 0:
-        cur = 0
-        res += '\n'
-
-    return cur, reg, res
+    return cycle, sss, screen
