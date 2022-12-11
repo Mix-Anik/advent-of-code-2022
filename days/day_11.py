@@ -1,6 +1,5 @@
 import re
-from functools import reduce
-from math import floor, gcd
+from math import floor, prod
 
 
 def part_1(data: str):
@@ -9,10 +8,6 @@ def part_1(data: str):
 
 def part_2(data: str):
     return solve(data, 10000, False)
-
-
-def lcm(*args):
-    return reduce(lambda a, b: (a * b) // gcd(a, b), args)
 
 
 def solve(data: str, rounds: int, divide_wl: bool):
@@ -32,13 +27,13 @@ def solve(data: str, rounds: int, divide_wl: bool):
             'inspected': 0
         }
 
-    do_rounds(rounds, monkeys, lcm(*divisors), divide_wl)
+    do_rounds(rounds, monkeys, prod(divisors), divide_wl)
     si = sorted([monkeys[i]['inspected'] for i in range(len(monkeys))])
 
     return si[-1] * si[-2]
 
 
-def do_rounds(amount: int, monkeys: dict, lcm_value: int, divide_wl: bool):
+def do_rounds(amount: int, monkeys: dict, divisors_prod: int, divide_wl: bool):
     for _ in range(amount):
         for i in range(len(monkeys)):
             monka = monkeys[i]
@@ -46,7 +41,7 @@ def do_rounds(amount: int, monkeys: dict, lcm_value: int, divide_wl: bool):
             for old in monka['items']:
                 new_wl = floor(eval(monka['op']) / 3) if divide_wl else eval(monka['op'])
                 throw_to = monka['action'][bool(new_wl % monka['divisor'])]
-                monkeys[throw_to]['items'].append(new_wl % lcm_value)
+                monkeys[throw_to]['items'].append(new_wl % divisors_prod)
 
             monka['inspected'] += len(monka['items'])
             monka['items'] = []
