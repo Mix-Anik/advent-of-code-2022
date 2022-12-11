@@ -1,5 +1,5 @@
 import re
-from math import floor, prod
+from functools import reduce
 
 
 def part_1(data: str):
@@ -17,6 +17,7 @@ def solve(data: str, rounds: int, divide_wl: bool):
     divisors = [int(val) for val in re.findall(r'divisible by (\d+)?', data)]
     actions = [(int(t), int(f)) for t, f in
                re.findall(r'If true: throw to monkey (\d+)\n\s+If false: throw to monkey (\d+)', data)]
+    divisors_prod = reduce((lambda a, b: a * b), divisors)
 
     for i in range(len(monkeys)):
         monkeys[i] = {
@@ -27,7 +28,7 @@ def solve(data: str, rounds: int, divide_wl: bool):
             'inspected': 0
         }
 
-    do_rounds(rounds, monkeys, prod(divisors), divide_wl)
+    do_rounds(rounds, monkeys, divisors_prod, divide_wl)
     si = sorted([monkeys[i]['inspected'] for i in range(len(monkeys))])
 
     return si[-1] * si[-2]
@@ -39,7 +40,7 @@ def do_rounds(amount: int, monkeys: dict, divisors_prod: int, divide_wl: bool):
             monka = monkeys[i]
 
             for old in monka['items']:
-                new_wl = floor(eval(monka['op']) / 3) if divide_wl else eval(monka['op'])
+                new_wl = eval(monka['op']) // 3 if divide_wl else eval(monka['op'])
                 throw_to = monka['action'][bool(new_wl % monka['divisor'])]
                 monkeys[throw_to]['items'].append(new_wl % divisors_prod)
 
