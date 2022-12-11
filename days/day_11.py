@@ -20,15 +20,15 @@ def solve(data: str, rounds: int, divide_wl: bool):
     items = [[int(val.strip()) for val in it.split(',')] for it in re.findall(r'Starting items: ((?:\d+,?\s?)*)', data)]
     operations = re.findall(r'Operation: new = (.*)?', data)
     divisors = [int(val) for val in re.findall(r'divisible by (\d+)?', data)]
-    actions = [(int(f), int(t)) for t, f in
+    actions = [(int(t), int(f)) for t, f in
                re.findall(r'If true: throw to monkey (\d+)\n\s+If false: throw to monkey (\d+)', data)]
 
     for i in range(len(monkeys)):
         monkeys[i] = {
             'items': items[i],
-            'ops': operations[i],
-            'divisors': divisors[i],
-            'actions': actions[i],
+            'op': operations[i],
+            'divisor': divisors[i],
+            'action': actions[i],
             'inspected': 0
         }
 
@@ -44,8 +44,8 @@ def do_rounds(amount: int, monkeys: dict, lcm_value: int, divide_wl: bool):
             monka = monkeys[i]
 
             for old in monka['items']:
-                new_wl = floor(eval(monka['ops']) / 3) if divide_wl else eval(monka['ops'])
-                throw_to = monka['actions'][int(new_wl % monka['divisors'] == 0)]
+                new_wl = floor(eval(monka['op']) / 3) if divide_wl else eval(monka['op'])
+                throw_to = monka['action'][bool(new_wl % monka['divisor'])]
                 monkeys[throw_to]['items'].append(new_wl % lcm_value)
 
             monka['inspected'] += len(monka['items'])
