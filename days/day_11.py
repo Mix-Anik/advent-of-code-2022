@@ -1,5 +1,6 @@
 import re
-from math import floor, lcm
+from functools import reduce
+from math import floor, gcd
 
 
 def part_1(data: str):
@@ -8,6 +9,10 @@ def part_1(data: str):
 
 def part_2(data: str):
     return solve(data, 10000, False)
+
+
+def lcm(*args):
+    return reduce(lambda a, b: (a * b) // gcd(a, b), args)
 
 
 def solve(data: str, rounds: int, divide_wl: bool):
