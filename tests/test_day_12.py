@@ -9,8 +9,8 @@ LOG = logging.getLogger()
 class TestDay12Solutions:
 
     def setup_class(self):
-        self.test_day_12_data = get_file_data('input_day12_test')
-        self.day_12_data = get_file_data('input_day12')
+        self.test_day_12_data = get_file_data('input_day12_test', False)
+        self.day_12_data = get_file_data('input_day12', False)
 
     def test_part_1(self):
         assert part_1(self.test_day_12_data) == 31
