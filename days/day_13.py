@@ -16,21 +16,18 @@ def compare(left: list or int, right: list or int):
     if isinstance(left, int):
         left = [left]
 
-    if isinstance(left, list) and isinstance(right, list):
-        for a, b in zip(left, right):
-            tmp = compare(a, b)
+    for a, b in zip(left, right):
+        tmp = compare(a, b)
 
-            if tmp != 0:
-                return tmp
+        if tmp != 0:
+            return tmp
 
-        if len(left) < len(right):
-            return 1
-        elif len(left) > len(right):
-            return -1
+    if len(left) < len(right):
+        return 1
+    elif len(left) > len(right):
+        return -1
 
-        return 0
-
-    return -1
+    return 0
 
 
 def part_1(data: str):
